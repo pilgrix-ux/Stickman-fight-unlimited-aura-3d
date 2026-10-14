@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#080b17">
+  <meta name="description" content="Unlimited Aura — a fast, browser-playable 2.5D stickman fighting game.">
+  <title>UNLIMITED AURA — 2.5D Arena Fighter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="game-shell" aria-label="Unlimited Aura fighting game">
+    <canvas id="game-canvas" aria-label="Game arena"></canvas>
+    <div class="screen-vignette" aria-hidden="true"></div>
+
+    <header class="hud" id="hud" hidden>
+      <div class="fighter-hud player-hud">
+        <div class="fighter-label"><span class="status-dot blue"></span><span>PLAYER 01</span><b id="player-tag">VOLT</b></div>
+        <div class="bar-track"><div class="bar-fill health-fill" id="player-health"></div></div>
+        <div class="bar-sub"><span>VITALITY</span><span id="player-hp-text">100 / 100</span></div>
+        <div class="bar-track energy-track"><div class="bar-fill energy-fill" id="player-energy"></div></div>
+        <div class="bar-sub energy-sub"><span>AURA CHARGE</span><span id="player-energy-text">35%</span></div>
+      </div>
+      <div class="round-hud">
+        <div class="round-caption">ROUND</div>
+        <div class="round-number" id="round-number">01</div>
+        <div class="timer" id="timer">90<span>.00</span></div>
+        <div class="round-score"><span id="player-rounds">0</span><i>—</i><span id="cpu-rounds">0</span></div>
+      </div>
+      <div class="fighter-hud cpu-hud">
+        <div class="fighter-label"><b>SHADE</b><span>CPU OPPONENT</span><span class="status-dot pink"></span></div>
+        <div class="bar-track"><div class="bar-fill health-fill cpu-health-fill" id="cpu-health"></div></div>
+        <div class="bar-sub"><span>VITALITY</span><span id="cpu-hp-text">100 / 100</span></div>
+        <div class="bar-track energy-track"><div class="bar-fill energy-fill cpu-energy-fill" id="cpu-energy"></div></div>
+        <div class="bar-sub energy-sub"><span>AURA CHARGE</span><span id="cpu-energy-text">20%</span></div>
+      </div>
+      <button class="icon-button pause-button" id="pause-button" aria-label="Pause game" title="Pause">Ⅱ</button>
+    </header>
+
+    <div class="arena-announcement" id="announcement" hidden>
+      <span class="announce-kicker" id="announce-kicker">ROUND 01</span>
+      <strong id="announce-title">READY</strong>
+      <span class="announce-line" id="announce-line">FIGHT WITH HONOR. STRIKE WITHOUT MERCY.</span>
+    </div>
+
+    <section class="overlay menu-overlay" id="menu-overlay">
+      <div class="menu-topline"><span class="brand-mark">UA<span>✦</span></span><span class="topline-text">AURA COMBAT DIVISION <i> / </i> 01</span><button class="icon-button sound-button" id="sound-button" aria-label="Toggle sound" title="Toggle sound">♫</button></div>
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> NEXT-GEN STICKMAN COMBAT <span></span></div>
+        <h1>UNLIMITED<br><em>AURA</em></h1>
+        <p class="hero-subtitle">Awaken your power. Own the arena.</p>
+        <div class="hero-meta"><span><i class="meta-symbol">◈</i> 2.5D ARENA</span><span><i class="meta-symbol">ϟ</i> AURA COMBAT</span><span><i class="meta-symbol">⌁</i> ONE PLAYER</span></div>
+        <div class="menu-actions">
+          <button class="primary-button" id="fight-button"><span>ENTER THE ARENA</span><b>↗</b></button>
+          <button class="secondary-button" id="training-button">TRAINING MODE <span>↗</span></button>
+        </div>
+        <div class="menu-footnote"><span class="live-dot"></span> SYSTEM READY <i>•</i> BUILD 0.1.0 <i>•</i> DESKTOP + MOBILE</div>
+      </div>
+      <div class="hero-side-note"><span>01</span><div></div><span>UNLIMITED POTENTIAL</span></div>
+      <div class="corner-label">A DIGITAL COMBAT EXPERIENCE <span>© UA STUDIOS</span></div>
+    </section>
+
+    <section class="overlay pause-overlay" id="pause-overlay" hidden>
+      <div class="modal-panel">
+        <div class="modal-kicker">COMBAT SUSPENDED</div>
+        <h2>PAUSED<span>.</span></h2>
+        <p>Take a breath. The arena isn't going anywhere.</p>
+        <button class="primary-button" id="resume-button"><span>RESUME FIGHT</span><b>▶</b></button>
+        <button class="secondary-button modal-secondary" id="restart-button">RESTART MATCH <span>↻</span></button>
+        <button class="text-button" id="menu-button">RETURN TO MAIN MENU</button>
+      </div>
+    </section>
+
+    <section class="overlay result-overlay" id="result-overlay" hidden>
+      <div class="modal-panel result-panel">
+        <div class="result-emblem" id="result-emblem">✦</div>
+        <div class="modal-kicker" id="result-kicker">MATCH COMPLETE</div>
+        <h2 id="result-title">VICTORY<span>.</span></h2>
+        <p id="result-copy">You own this arena.</p>
+        <div class="result-stats"><div><span>ROUNDS WON</span><b id="result-round-score">2 — 0</b></div><div><span>FIGHT STYLE</span><b id="result-style">AURA MASTER</b></div></div>
+        <button class="primary-button" id="rematch-button"><span>FIGHT AGAIN</span><b>↻</b></button>
+        <button class="text-button" id="result-menu-button">MAIN MENU</button>
+      </div>
+    </section>
+
+    <div class="mobile-controls" id="mobile-controls" hidden>
+      <div class="move-cluster" aria-label="Movement controls">
+        <button class="move-button move-up" data-key="up" aria-label="Move into arena">△</button>
+        <button class="move-button move-left" data-key="left" aria-label="Move left">‹</button>
+        <button class="move-button move-down" data-key="down" aria-label="Move back in arena">▽</button>
+        <button class="move-button move-right" data-key="right" aria-label="Move right">›</button>
+      </div>
+      <div class="action-cluster" aria-label="Combat controls">
+        <button class="action-button guard-button" data-action="guard"><span>◈</span><small>GUARD</small></button>
+        <button class="action-button jump-button" data-action="jump"><span>↑</span><small>JUMP</small></button>
+        <button class="action-button punch-button" data-action="punch"><span>✦</span><small>PUNCH</small></button>
+        <button class="action-button kick-button" data-action="kick"><span>ϟ</span><small>KICK</small></button>
+        <button class="action-button aura-button" data-action="aura"><span>◎</span><small>AURA BLAST</small></button>
+      </div>
+    </div>
+
+    <footer class="game-footer" id="game-footer" hidden>
+      <div><span class="footer-pulse"></span> LIVE COMBAT</div>
+      <div class="desktop-controls-hint">MOVE <kbd>A</kbd><kbd>D</kbd> / <kbd>W</kbd><kbd>S</kbd> <i>·</i> JUMP <kbd>SPACE</kbd> <i>·</i> PUNCH <kbd>J</kbd> <i>·</i> KICK <kbd>K</kbd> <i>·</i> GUARD <kbd>L</kbd> <i>·</i> AURA <kbd>I</kbd></div>
+      <div class="training-label" id="training-label" hidden>TRAINING MODE</div>
+    </footer>
+    <div class="portrait-warning" id="portrait-warning"><div class="rotate-icon">▱<span>↻</span></div><b>ROTATE TO FIGHT</b><p>Turn your device sideways for the best arena experience.</p></div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
